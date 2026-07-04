@@ -451,6 +451,61 @@ II.	Eficiencia Energética y Térmica:  Disipación híbrida avanzada y morfolog
     <!-- Imagen principal ecosistema córdoba -->
     <img src="torre5a.png" alt="Imagen Tecnológica" class="tech-image" />
 
+<script>
+(function() {
+    const target = document.getElementById('target-img');
+    const container = document.getElementById('canvas-container');
+    
+    // Configuración del Observador: se activa cuando la imagen es visible
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Aquí inicia el motor "bestial" solo cuando la imagen llega a la vista
+                iniciarEfectoBestial();
+                observer.disconnect(); // Una vez activado, libera memoria
+            }
+        });
+    }, { threshold: 0.1 });
+
+    observer.observe(target);
+
+    function iniciarEfectoBestial() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        container.appendChild(canvas);
+        
+        canvas.style.position = 'absolute';
+        canvas.style.top = target.offsetTop + 'px';
+        canvas.style.left = target.offsetLeft + 'px';
+        canvas.width = target.width;
+        canvas.height = target.height;
+
+        function render() {
+            ctx.drawImage(target, 0, 0, canvas.width, canvas.height);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            // Disrupción fractal: altera los canales de color aleatoriamente
+            for(let i = 0; i < data.length; i += 200) {
+                data[i] = data[i + Math.floor(Math.random() * 20)]; 
+            }
+            ctx.putImageData(imageData, Math.random() * 3, Math.random() * 3);
+            requestAnimationFrame(render);
+        }
+        target.style.visibility = 'hidden'; // Oculta la original
+        render();
+    }
+})();
+</script>
+
+
+
+
+
+
+
+
+   
      </div>
       <br><br>
 <br><br>
